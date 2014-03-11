@@ -1,0 +1,8 @@
+#ifndef BOARD_H
+#define BOARD_H
+
+#include "direction.h"
+#include "coordinate.h"
+#include "gameboard.h"
+
+#endif // BOARD_H

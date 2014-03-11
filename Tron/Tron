@@ -1,0 +1,12 @@
+#ifndef TRON_H
+#define TRON_H
+
+#include "computerbase.h"
+#include "computer0.h"
+#include "computer2.h"
+
+#include "lightcycle.h"
+#include "tronbattle.h"
+#include "tronbattlesquare.h"
+
+#endif // TRON_H
