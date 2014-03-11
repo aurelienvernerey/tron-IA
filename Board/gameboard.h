@@ -81,7 +81,7 @@ GameBoard<T>::GameBoard (int _width, int _height)
     }
 }
 
-template<typename T>//tmp ( constructeur par copie )
+template<typename T>
 GameBoard<T>::GameBoard (GameBoard<T> const& obj)
     :content(NULL)
 {
@@ -239,6 +239,7 @@ void GameBoard<T>::getBoardCopy (U **&newBoard, V **oldBoard, int _width, int _h
         }
     }
 }
+
 template<typename T>
 int GameBoard<T>::getAdjacentLiberty (Coordinate position)
 {
@@ -251,15 +252,6 @@ int GameBoard<T>::getAdjacentLiberty (Coordinate position)
 
     return liberty;
 }
-
-/*template<typename T>
-int GameBoard<T>::getLiberty (Coordinate position, bool firstCanBeOccuped) {
-    bool** board;
-    this->getBoardCopy(board, this->content, this->width, this->height);
-    int liberty =  this->calculateLiberty(board, position, firstCanBeOccuped);
-    this->deleteBoard(board, this->width, this->height);
-    return liberty;
-}*/
 
 template<typename T>
 int GameBoard<T>::getLiberty (Coordinate position, int recursionLevel, bool firstCanBeOccuped) {
@@ -323,28 +315,26 @@ std::vector<Coordinate> GameBoard<T>::calculateWayToNearestPoint (bool** board, 
         std::vector<std::vector<Coordinate> > *nextPossibleWays = new std::vector<std::vector<Coordinate> >;
 
         for (int i = 0; i < possibleWays->size(); i++) {
-            //short* orderedDirection = new short[4];
-            //this->getDirectionOrdered(possibleWays[i].back(), orderedDirection);// usefull ?? recalculate ???
-
             for (int direction = 0; direction < 4; direction++) {
-                Coordinate coord = (*possibleWays)[i].back() + direction;//orderedDirection[direction];
+                Coordinate coord = (*possibleWays)[i].back() + direction;
+
+                for (int arrival = 0; arrival < arrivals.size(); arrival++) {
+                    if(coord == arrivals[arrival]) {
+                        std::vector<Coordinate> way = (*possibleWays)[i];
+                        way.push_back(coord);
+                        way.erase(way.begin());
+
+                        delete nextPossibleWays;
+                        delete possibleWays;
+
+                        return way;
+                    }
+                }
 
                 if (board[coord.y][coord.x]) {
                     board[coord.y][coord.x] = false;
                     nextPossibleWays->push_back((*possibleWays)[i]);
                     nextPossibleWays->back().push_back(coord);
-
-                    for (int arrival = 0; arrival < arrivals.size(); arrival++) {
-                        if(coord == arrivals[arrival]) {
-                            std::vector<Coordinate> way = nextPossibleWays->back();
-                            way.erase(way.begin());
-
-                            delete nextPossibleWays;
-                            delete possibleWays;
-
-                            return way;
-                        }
-                    }
                 }
             }
         }
@@ -375,19 +365,12 @@ int GameBoard<T>::calculateDistanceTo (bool** board, std::vector<Coordinate> *po
                 board[coord.y][coord.x] = false;
                 nextPositions->push_back(coord);
 
-                /*if(coord == arrival) {//tmp
-                    delete nextPositions;
-                    delete positions;
-                    return waySize;
-                }*/
                 if (cache != NULL) {
                                 cache[coord.y][coord.x] = waySize;
                             }
             }
-            /*if (cache != NULL) {
-                cache[coord.y][coord.x] = waySize;
-            }*/
-            if(coord == arrival) {//tmp
+
+            if(coord == arrival) {
                 if (cache != NULL) {
                                 cache[coord.y][coord.x] = waySize;
                             }
@@ -408,10 +391,10 @@ int GameBoard<T>::calculateDistanceTo (bool** board, std::vector<Coordinate> *po
     if (cache != NULL && arrival.y > 0 && arrival.y < this->height && arrival.x > 0 && arrival.x < this->width) {
         cache[arrival.y][arrival.x] = -1;
     }
-    return -1;// no way
+    return -1;
 }
 
-template<typename T> // tmp don't calculate if arrival is false
+template<typename T>
 std::vector<Coordinate> GameBoard<T>::getWayTo (Coordinate departure, Coordinate arrival, int maxWaySize) {
     bool** board;
     this->getBoardCopy(board, this->content, this->width, this->height);
@@ -429,7 +412,7 @@ std::vector<Coordinate> GameBoard<T>::getWayTo (Coordinate departure, Coordinate
     return wayTo;
 }
 
-template<typename T> // tmp don't calculate if arrivals is false
+template<typename T>
 std::vector<Coordinate> GameBoard<T>::getWayToNearestPoint (Coordinate departure, const std::vector<Coordinate> &arrivals, int maxWaySize) {
     bool** board;
     this->getBoardCopy(board, this->content, this->width, this->height);
@@ -444,7 +427,7 @@ std::vector<Coordinate> GameBoard<T>::getWayToNearestPoint (Coordinate departure
     return nearestWay;
 }
 
-template<typename T> // tmp don't calculate if arrival is false
+template<typename T>
 int GameBoard<T>::getDistanceBetween (Coordinate departure, Coordinate arrival, int** cache) {
     bool** board;
     this->getBoardCopy(board, this->content, this->width, this->height);
@@ -457,7 +440,7 @@ int GameBoard<T>::getDistanceBetween (Coordinate departure, Coordinate arrival, 
     return distance;
 }
 
-template<typename T> // tmp don't calculate if arrival is false
+template<typename T>
 void GameBoard<T>::getDistanceToEveryWhere (Coordinate departure, int** cache) {
     bool** board;
     this->getBoardCopy(board, this->content, this->width, this->height);
@@ -466,47 +449,6 @@ void GameBoard<T>::getDistanceToEveryWhere (Coordinate departure, int** cache) {
     this->calculateDistanceTo (board, positions, Coordinate(-1, -1), cache);
     this->deleteBoard(board, this->width, this->height);
 }
-
-/*int getMinimum (int a, int b) {
-    if (a < b) {
-        return a;
-    }
-
-    return b;
-}
-
-void switchValue (short& a, short& b) {
-    short tmp = a;
-    a = b;
-    b = tmp;
-}//*/
-
-/*void getDirectionOrdered (Coordinate position, short* orderedDirection) {//tmp
-    int directionValue[4];
-
-    for (int direction = 0; direction < 4; direction++) {
-        Coordinate newPosition = position + direction;//tmp check if mov is ok;
-        directionValue[direction] = this->getMinimum(this->getMinimum(newPosition.x, this->game->width - 2 - newPosition.x), this->getMinimum(newPosition.y, this->game->height - 2 - newPosition.y));
-    }
-
-    for (int i = 0; i < 4; i++) { //tmp short
-        orderedDirection[i] = i;
-    }
-
-    bool modif;
-
-    do {
-        modif = false;
-
-        for (int i = 0; i < 3; i++) {
-            if (directionValue[orderedDirection[i]] < directionValue[orderedDirection[i + 1]]) {
-                this->switchValue(orderedDirection[i], orderedDirection[i + 1]);
-                modif = true;
-            }
-        }
-    } while (modif); //end tmp short
-}//*/
-
 } // namespace Board
 
 #endif // GAMEBOARD_H

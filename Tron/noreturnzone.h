@@ -7,7 +7,7 @@ namespace Tron
 {
 class NoReturnZone
 {
-public: // tmp
+public:
     Board::Coordinate entrance;
     int size;
 public:

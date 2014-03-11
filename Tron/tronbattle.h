@@ -19,7 +19,6 @@ public:
     short playerNumber;
     std::vector<LightCycle> players;
     bool aPlayerJustLoose;
-    //int freeSquareRemaining; //tmp
     Board::GameBoard<TronBattleSquare>* board;
 public:
     TronBattle(int width, int height, int _playerNumber);

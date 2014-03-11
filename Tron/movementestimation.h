@@ -7,7 +7,7 @@ namespace Tron
 {
 class MovementEstimation
 {
-public: // tmp
+public:
     Board::Direction direction;
     int liberty;
 public:

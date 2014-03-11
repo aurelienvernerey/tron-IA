@@ -28,7 +28,7 @@ std::istream& operator >> (std::istream& stream, TronBattle& obj)
     for (int playerId = 0; playerId < obj.playerNumber; ++playerId) {
         std::cin >> obj.players[playerId];
         if (obj.players[playerId].justLoose) {
-            obj.aPlayerJustLoose = true;//tmp usefull ??
+            obj.aPlayerJustLoose = true;
             --obj.playerRemaining;
         }
     }
@@ -39,7 +39,7 @@ std::string TronBattle::toString () const
 {
     std::stringstream s;
 
-    s << "Default_String"; // tmp
+    s << ""; // tmp
 
     return s.str();
 }

@@ -9,7 +9,6 @@ class TronBattleSquare : public Board::Square
 {
 public:
     int playerId;
-    //int LightCyclePosition; // tmp usefull ??
     bool isWall;
 public:
     TronBattleSquare(int _playerId = -1, bool _isWall = false);

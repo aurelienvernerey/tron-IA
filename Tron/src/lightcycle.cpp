@@ -27,17 +27,17 @@ std::istream& operator >> (std::istream& stream, LightCycle& obj)
             obj.justLoose = true;
 
             for (unsigned int i = 0; i < obj.lightCycle.size(); ++i) {
-                (*obj.board)(obj.lightCycle[i].x, obj.lightCycle[i].y, TronBattleSquare()); // tmp free square
+                (*obj.board)(obj.lightCycle[i].x, obj.lightCycle[i].y, TronBattleSquare());
             }
         }
     }
     else {
         if (obj.lightCycle.size() == 0 && initialPosition != actualPosition) {
-            (*obj.board)(++initialPosition.x, ++initialPosition.y, TronBattleSquare(obj.id)); // tmp ocupe square
+            (*obj.board)(++initialPosition.x, ++initialPosition.y, TronBattleSquare(obj.id));
             obj.lightCycle.push_back(initialPosition);
         }
 
-        (*obj.board)(++actualPosition.x, ++actualPosition.y, TronBattleSquare(obj.id)); // tmp ocupe square
+        (*obj.board)(++actualPosition.x, ++actualPosition.y, TronBattleSquare(obj.id));
         obj.lightCycle.push_back(actualPosition);
     }
 

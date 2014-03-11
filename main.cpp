@@ -8,8 +8,6 @@
 #define BOARD_HEIGHT    22
 #define BOARD_WIDTH     32
 
-//#define DEBUG
-
 using namespace std;
 using namespace Board;
 using namespace Tron;
